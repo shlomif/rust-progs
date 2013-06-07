@@ -15,7 +15,7 @@ impl MSVC_Rand_Gen {
         return ((self.seed >> 16) & 0x7FFF);
     }
     fn max_rand(&mut self, mymax: i32) -> i32 {
-        return (self.rand() % mymax);
+        return self.rand() % mymax;
     }
     fn shuffle<T>(&mut self, deck: &mut [T]) {
         if (deck.len() > 0) {
