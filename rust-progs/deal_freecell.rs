@@ -69,7 +69,6 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         let suit = card % 4;
         let rank = card / 4;
 
-        // println(fmt!("card=%i,suit=%i,rank=%i", card as int, suit as int, rank as int));
         fmt!("%c%c", "A23456789TJQK"[rank] as char, "CDHS"[suit] as char)
     };
 
