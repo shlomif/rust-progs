@@ -87,7 +87,7 @@ fn main() {
         None => println("I need a real number"),
     }
 
-    if (false) {
+    if false {
         let mut r = MSVC_Rand_Gen { seed: 1,};
 
         println(fmt!("Result=%i",r.rand() as int));
