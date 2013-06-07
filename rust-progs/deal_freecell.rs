@@ -80,7 +80,12 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
 }
 
 fn main() {
-    print(deal_ms_fc_board(24));
+    let args: ~[~str] = os::args();
+
+    match uint::from_str(args[1]) {
+        Some(x) => print(deal_ms_fc_board(x as i32)),
+        None => println("I need a real number"),
+    }
 
     if (false) {
         let mut r = MSRand { seed: 1,};
