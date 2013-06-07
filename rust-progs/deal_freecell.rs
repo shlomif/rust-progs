@@ -11,7 +11,7 @@ struct MSVC_Rand_Gen {
 
 impl MSVC_Rand_Gen {
     fn rand(&mut self) -> i32 {
-        self.seed = ((self.seed * 214013i32 + 2531011i32) & 0x7FFFFFFFi32);
+        self.seed = ((self.seed * 214013 + 2531011) & 0x7FFFFFFF);
         return ((self.seed >> 16i32) & 0x7FFFi32);
     }
     fn max_rand(&mut self, mymax: i32) -> i32 {
