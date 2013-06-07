@@ -18,9 +18,9 @@ impl MSVC_Rand_Gen {
         return self.rand() % mymax;
     }
     fn shuffle<T>(&mut self, deck: &mut [T]) {
-        if (deck.len() > 0) {
+        if deck.len() > 0 {
             let mut i = (deck.len() as i32) - 1;
-            while (i > 0) {
+            while i > 0 {
                 let j = self.max_rand(i+1);
                 vec::swap(deck, i as uint, j as uint);
                 i = i-1;
