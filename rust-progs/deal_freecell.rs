@@ -5,11 +5,11 @@
  * ( http://en.wikipedia.org/wiki/MIT_License ).
  * */
 
-struct MSRand {
+struct MSVC_Rand_Gen {
     seed: i32
 }
 
-impl MSRand {
+impl MSVC_Rand_Gen {
     fn rand(&mut self) -> i32 {
         self.seed = ((self.seed * 214013i32 + 2531011i32) & 0x7FFFFFFFi32);
         return ((self.seed >> 16i32) & 0x7FFFi32);
@@ -43,7 +43,7 @@ impl MSRand {
  * */
 
 fn deal_ms_fc_board(seed: i32) -> ~str {
-    let mut randomizer = MSRand { seed: seed, };
+    let mut randomizer = MSVC_Rand_Gen { seed: seed, };
     let num_cols = 8;
 
     let _perl_range = |start: uint, end: uint| {
@@ -88,7 +88,7 @@ fn main() {
     }
 
     if (false) {
-        let mut r = MSRand { seed: 1,};
+        let mut r = MSVC_Rand_Gen { seed: 1,};
 
         println(fmt!("Result=%i",r.rand() as int));
         println(fmt!("Result=%i",r.rand() as int));
@@ -96,7 +96,7 @@ fn main() {
 
         let mut array: [int, ..10] = [0,1,2,3,4,5,6,7,8,9];
 
-        let mut shuffler = MSRand { seed : 24,};
+        let mut shuffler = MSVC_Rand_Gen { seed : 24,};
 
         shuffler.shuffle(array);
 
