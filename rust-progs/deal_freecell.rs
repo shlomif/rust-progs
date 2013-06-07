@@ -42,12 +42,15 @@ impl MSVC_Rand_Gen {
  *
  * */
 
+
 fn deal_ms_fc_board(seed: i32) -> ~str {
     let mut randomizer = MSVC_Rand_Gen { seed: seed, };
     let num_cols = 8;
 
     let mut columns = vec::from_elem(num_cols, ~[]);
     let mut deck = vec::from_fn(4*13, |i| i);
+
+    let rank_strings = str::to_chars("A23456789TJQK");
 
     randomizer.shuffle(deck);
 
@@ -61,7 +64,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         let suit = card % 4;
         let rank = card / 4;
 
-        fmt!("%c%c", "A23456789TJQK"[rank] as char, "CDHS"[suit] as char)
+        fmt!("%c%c",rank_strings[rank], "CDHS"[suit] as char)
     };
 
     let render_column = |col: &~[uint]| {
