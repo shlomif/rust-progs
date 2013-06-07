@@ -1,5 +1,3 @@
-use core::util;
-
 struct MSRand {
     seed: i32
 }
@@ -17,16 +15,16 @@ impl MSRand {
             let mut i = deck.len() as i32;
             while (--i > 0) {
                 let j = self.max_rand(i+1i32);
-                core::util::swap((&mut deck[i]), (&mut deck[j]));
+                vec::swap(deck, i as uint, j as uint);
             }
         }
     }
 }
 
 fn main() {
-    let mut r = MSRand { seed: 24,};
+    let mut r = MSRand { seed: 1,};
 
     println(fmt!("Result=%i",r.rand() as int));
-    // println(fmt!("Result=%i",r.rand()));
-    // println(fmt!("Result=%i",r.rand()));
+    println(fmt!("Result=%i",r.rand() as int));
+    println(fmt!("Result=%i",r.rand() as int));
 }
