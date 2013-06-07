@@ -9,3 +9,5 @@ mut-vars: mut-vars.rs
 deal_freecell: deal_freecell.rs
 	rustc $<
 
+test: all
+	runprove t/*.t

@@ -1,3 +1,10 @@
+/*
+ * Microsoft C Run-time-Library-compatible Random Number Generator
+ * Copyright by Shlomi Fish, 2011.
+ * Released under the MIT/X11 License
+ * ( http://en.wikipedia.org/wiki/MIT_License ).
+ * */
+
 struct MSRand {
     seed: i32
 }
@@ -22,20 +29,74 @@ impl MSRand {
     }
 }
 
+/*
+ * Microsoft Windows Freecell / Freecell Pro boards generation.
+ *
+ * See:
+ *
+ * - http://rosettacode.org/wiki/Deal_cards_for_FreeCell
+ *
+ * - http://www.solitairelaboratory.com/mshuffle.txt
+ *
+ * Under MIT/X11 Licence.
+ *
+ * */
+
+fn deal_ms_fc_board(seed: i32) -> ~str {
+    let mut randomizer = MSRand { seed: seed, };
+    let num_cols = 8;
+
+    let _perl_range = |start: uint, end: uint| {
+        let ret = do vec::build |push| {
+            for uint::range(start, end+1) |i| { push(i); }
+        };
+        ret
+    };
+
+    let mut columns = _perl_range(0, num_cols-1).map(|i| { ~[] });
+    let mut deck = _perl_range(0, 4*13-1);
+
+    randomizer.shuffle(deck);
+
+    vec::reverse(deck);
+
+    for [0, ..52].each |i| {
+        columns[*i % num_cols].push(deck[*i]);
+    };
+
+    let render_card = |card_i: uint| {
+        let card = card_i;
+        let suit = card % 4;
+        let rank = card / 4;
+
+        "A23456789TJQK"[rank].to_str() + "CDHS"[suit].to_str()
+    };
+
+    let render_column = |col: &~[uint]| {
+        fmt!(": %s\n", str::connect((col.map(|i| { render_card( *i ) })), " "))
+    };
+
+    return str::connect(columns.map(render_column), &"");
+}
+
 fn main() {
-    let mut r = MSRand { seed: 1,};
+    println(deal_ms_fc_board(24));
 
-    println(fmt!("Result=%i",r.rand() as int));
-    println(fmt!("Result=%i",r.rand() as int));
-    println(fmt!("Result=%i",r.rand() as int));
+    if (false) {
+        let mut r = MSRand { seed: 1,};
 
-    let mut array: [int, ..10] = [0,1,2,3,4,5,6,7,8,9];
+        println(fmt!("Result=%i",r.rand() as int));
+        println(fmt!("Result=%i",r.rand() as int));
+        println(fmt!("Result=%i",r.rand() as int));
 
-    let mut shuffler = MSRand { seed : 24,};
+        let mut array: [int, ..10] = [0,1,2,3,4,5,6,7,8,9];
 
-    shuffler.shuffle(array);
+        let mut shuffler = MSRand { seed : 24,};
 
-    for array.each |i| {
-        println(fmt!("A=%i", *i));
+        shuffler.shuffle(array);
+
+        for array.each |i| {
+            println(fmt!("A=%i", *i));
+        }
     }
 }
