@@ -57,8 +57,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         columns[i % num_cols].push(deck[i]);
     };
 
-    let render_card = |card_i: uint| {
-        let card = card_i;
+    let render_card = |card: &uint| {
         let suit = card % 4;
         let rank = card / 4;
 
@@ -66,7 +65,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
     };
 
     let render_column = |col: &~[uint]| {
-        fmt!(": %s\n", str::connect((col.map(|i| { render_card( *i ) })), " "))
+        fmt!(": %s\n", str::connect((col.map(render_card)), " "))
     };
 
     return str::connect(columns.map(render_column), &"");
