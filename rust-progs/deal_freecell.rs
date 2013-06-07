@@ -46,15 +46,8 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
     let mut randomizer = MSVC_Rand_Gen { seed: seed, };
     let num_cols = 8;
 
-    let _perl_range = |start: uint, end: uint| {
-        let ret = do vec::build |push| {
-            for uint::range(start, end+1) |i| { push(i); }
-        };
-        ret
-    };
-
     let mut columns =  vec::from_elem(num_cols, ~[]);
-    let mut deck = _perl_range(0, 4*13-1);
+    let mut deck = vec::from_fn(4*13, |i| i);
 
     randomizer.shuffle(deck);
 
