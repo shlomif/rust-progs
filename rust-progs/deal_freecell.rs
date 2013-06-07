@@ -60,8 +60,8 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
 
     vec::reverse(deck);
 
-    for [0, ..52].each |i| {
-        columns[*i % num_cols].push(deck[*i]);
+    for uint::range(0, 52) |i| {
+        columns[i % num_cols].push(deck[i]);
     };
 
     let render_card = |card_i: uint| {
@@ -69,7 +69,8 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         let suit = card % 4;
         let rank = card / 4;
 
-        "A23456789TJQK"[rank].to_str() + "CDHS"[suit].to_str()
+        // println(fmt!("card=%i,suit=%i,rank=%i", card as int, suit as int, rank as int));
+        fmt!("%c%c", "A23456789TJQK"[rank] as char, "CDHS"[suit] as char)
     };
 
     let render_column = |col: &~[uint]| {
@@ -80,7 +81,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
 }
 
 fn main() {
-    println(deal_ms_fc_board(24));
+    print(deal_ms_fc_board(24));
 
     if (false) {
         let mut r = MSRand { seed: 1,};
