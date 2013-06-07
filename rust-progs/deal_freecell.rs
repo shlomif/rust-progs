@@ -12,7 +12,7 @@ struct MSVC_Rand_Gen {
 impl MSVC_Rand_Gen {
     fn rand(&mut self) -> i32 {
         self.seed = ((self.seed * 214013 + 2531011) & 0x7FFFFFFF);
-        return ((self.seed >> 16i32) & 0x7FFFi32);
+        return ((self.seed >> 16) & 0x7FFF);
     }
     fn max_rand(&mut self, mymax: i32) -> i32 {
         return (self.rand() % mymax);
@@ -21,7 +21,7 @@ impl MSVC_Rand_Gen {
         if (deck.len() > 0) {
             let mut i = (deck.len() as i32) - 1;
             while (i > 0) {
-                let j = self.max_rand(i+1i32);
+                let j = self.max_rand(i+1);
                 vec::swap(deck, i as uint, j as uint);
                 i = i-1;
             }
