@@ -53,7 +53,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         ret
     };
 
-    let mut columns = _perl_range(0, num_cols-1).map(|i| { ~[] });
+    let mut columns =  vec::from_elem(num_cols, ~[]);
     let mut deck = _perl_range(0, 4*13-1);
 
     randomizer.shuffle(deck);
