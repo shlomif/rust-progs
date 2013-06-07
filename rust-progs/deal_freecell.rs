@@ -72,7 +72,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         fmt!(": %s\n", str::connect((col.map(render_card)), " "))
     };
 
-    return str::connect(columns.map(render_column), &"");
+    return str::concat(columns.map(render_column));
 }
 
 fn main() {
