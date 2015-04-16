@@ -1,0 +1,9 @@
+=encoding utf8
+
+=head1 Rust Programs by Shlomi Fish
+
+These are various programs that Shlomi Fish ( L<http://www.shlomifish.org/> )
+has written in order to learn Rust (L<http://www.rust-lang.org/>). Unless
+specified otherwise, their licence is the MIT/X11 License.
+
+=cut
