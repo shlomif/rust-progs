@@ -3,7 +3,7 @@ fn main() {
     let mut count = 0;
 
     while count < 10 {
-        println(fmt!("%? - count: %?", hi, count));
+        println!("{} - count: {}", hi, count);
         count += 1;
     }
 }

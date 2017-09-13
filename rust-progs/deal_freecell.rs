@@ -43,7 +43,7 @@ impl MSVC_Rand_Gen {
  * */
 
 
-fn deal_ms_fc_board(seed: i32) -> ~str {
+fn deal_ms_fc_board(seed: i32) -> str {
     let mut randomizer = MSVC_Rand_Gen { seed: seed, };
     let num_cols = 8;
 
@@ -68,7 +68,7 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
         fmt!("%c%c",rank_strings[rank], suit_strings[suit])
     };
 
-    let render_column = |col: &~[uint]| {
+    let render_column = |col: &[uint]| {
         fmt!(": %s\n", str::connect((col.map(render_card)), " "))
     };
 
@@ -76,19 +76,19 @@ fn deal_ms_fc_board(seed: i32) -> ~str {
 }
 
 fn main() {
-    let args: ~[~str] = os::args();
+    let args: [str] = os::args();
 
     match uint::from_str(args[1]) {
-        Some(x) => print(deal_ms_fc_board(x as i32)),
-        None => println("I need a real number"),
+        Some(x) => print!("{}", deal_ms_fc_board(x as i32)),
+        None => println!("I need a real number"),
     }
 
     if false {
         let mut r = MSVC_Rand_Gen { seed: 1,};
 
-        println(fmt!("Result=%i",r.rand() as int));
-        println(fmt!("Result=%i",r.rand() as int));
-        println(fmt!("Result=%i",r.rand() as int));
+        println!("Result={}",r.rand() as int);
+        println!("Result={}",r.rand() as int);
+        println!("Result={}",r.rand() as int);
 
         let mut array: [int, ..10] = [0,1,2,3,4,5,6,7,8,9];
 
@@ -97,7 +97,7 @@ fn main() {
         shuffler.shuffle(array);
 
         for array.each |i| {
-            println(fmt!("A=%i", *i));
+            println!("A={}", *i);
         }
     }
 }
