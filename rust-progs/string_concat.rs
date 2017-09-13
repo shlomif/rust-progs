@@ -6,13 +6,13 @@
  * */
 
 fn main() {
-    let s = ~"hello";
-    println(fmt!("s=%s", s + " world"));
+    let s = "hello";
+    println!("s={}", s.to_owned() + " world");
 
-    let s1 = s + ~" world";
-    println(fmt!("s1=%s", s1));
+    let s1 = s.to_owned() + " world";
+    println!("s1={}", s1);
 
-    let mut mutable_s = ~"hello";
-    mutable_s += ~" world";
-    println(fmt!("mutable_s=%s", mutable_s));
+    let mut mutable_s = "hello".to_owned();
+    mutable_s += " world";
+    println!("mutable_s={}", mutable_s);
 }

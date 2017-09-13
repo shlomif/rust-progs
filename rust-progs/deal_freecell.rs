@@ -62,26 +62,24 @@ fn deal_ms_fc_board(seed: i32) -> String {
         columns[i % num_cols].push(deck[i]);
     };
 
-    let render_card = |card| {
-        let suit = card % 4;
-        let rank = card / 4;
-
-        return format!("{:?}{:?}",rank_strings.chars().nth(rank as usize), suit_strings.chars().nth(suit as usize))
-    };
-
-    let render_column = |col| {
-        return format!(": {}\n", col.iter().map(render_card).collect::<Vec<String>>().join(" "))
-    };
-
-    return columns.iter().map(render_column).collect::<Vec<String>>().join(" ")
+    return columns.iter().map(|col| {
+        return format!(": {}\n", col.iter().map(|card| {
+                    let suit = card % 4;
+                            let rank = card / 4;
+                                    return format!("{:?}{:?}",rank_strings.chars().nth(rank as usize), suit_strings.chars().nth(suit as usize))
+        }).collect::<Vec<String>>().join(" "))
+    }).collect::<Vec<String>>().join(" ")
 
 }
 
 fn main() {
-    let args: [str] = env::args();
+    let mut args = env::args();
 
-    match u32::from_str(args[1]) {
-        Some(x) => print!("{}", deal_ms_fc_board(x as i32)),
+    match args.nth(1) {
+        Some(x) => match x.to_string().parse::<u32>() {
+            Ok(y) => print!("{}", deal_ms_fc_board(y as i32)),
+            Err(E) => println!("I need a real number"),
+        },
         None => println!("I need a real number"),
     }
 
