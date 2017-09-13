@@ -12,7 +12,7 @@ struct MSVC_Rand_Gen {
 
 impl MSVC_Rand_Gen {
     fn rand(&mut self) -> i32 {
-        self.seed = (self.seed * 214013 + 2531011) & 0x7FFFFFFF;
+        self.seed = self.seed.wrapping_mul(214013).wrapping_add(2531011) & 0x7FFFFFFF;
         return (self.seed >> 16) & 0x7FFF;
     }
     fn max_rand(&mut self, mymax: i32) -> i32 {
@@ -51,8 +51,8 @@ fn deal_ms_fc_board(seed: i32) -> String {
     let mut columns = vec![vec![]; num_cols];
     let mut deck = (0..4*13).into_iter().collect::<Vec<u32>>();
 
-    let rank_strings = "A23456789TJQK";
-    let suit_strings = "CDHS";
+    let rank_strings: Vec<char> = "A23456789TJQK".chars().collect();
+    let suit_strings : Vec<char> = "CDHS".chars().collect();
 
     randomizer.shuffle(&mut deck);
 
@@ -64,11 +64,11 @@ fn deal_ms_fc_board(seed: i32) -> String {
 
     return columns.iter().map(|col| {
         return format!(": {}\n", col.iter().map(|card| {
-                    let suit = card % 4;
-                            let rank = card / 4;
-                                    return format!("{:?}{:?}",rank_strings.chars().nth(rank as usize), suit_strings.chars().nth(suit as usize))
+            let suit = card % 4;
+            let rank = card / 4;
+            return format!("{}{}",rank_strings[rank as usize], suit_strings[suit as usize])
         }).collect::<Vec<String>>().join(" "))
-    }).collect::<Vec<String>>().join(" ")
+    }).collect::<Vec<String>>().join("")
 
 }
 
