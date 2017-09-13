@@ -49,7 +49,7 @@ fn deal_ms_fc_board(seed: i32) -> String {
     let num_cols = 8;
 
     let mut columns = vec![vec![]; num_cols];
-    let mut deck = (0..4*13).into_iter().collect::<Vec<i32>>();
+    let mut deck = (0..4*13).into_iter().collect::<Vec<u32>>();
 
     let rank_strings = "A23456789TJQK";
     let suit_strings = "CDHS";
@@ -62,7 +62,7 @@ fn deal_ms_fc_board(seed: i32) -> String {
         columns[i % num_cols].push(deck[i]);
     };
 
-    let render_card = |card: &u32| {
+    let render_card = |card: u32| {
         let suit = card % 4;
         let rank = card / 4;
 
@@ -70,10 +70,11 @@ fn deal_ms_fc_board(seed: i32) -> String {
     };
 
     let render_column = |col: &[u32]| {
-        return format!(": {}\n", col.iter().map(render_card).join(" "))
+        return format!(": {}\n", col.iter().map(render_card).collect::<Vec<String>>().join(" "))
     };
 
-    return str::concat(columns.map(render_column));
+    return columns.iter().map(render_column).collect::<Vec<String>>().join(" ")
+
 }
 
 fn main() {
