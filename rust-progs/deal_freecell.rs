@@ -62,7 +62,7 @@ fn deal_ms_fc_board(seed: i32) -> String {
         columns[i % num_cols].push(deck[i]);
     };
 
-    let render_card = |card: u32| {
+    let render_card = |&card: &u32| {
         let suit = card % 4;
         let rank = card / 4;
 
