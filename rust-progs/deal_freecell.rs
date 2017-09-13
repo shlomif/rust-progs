@@ -52,7 +52,7 @@ fn deal_ms_fc_board(seed: i32) -> String {
     let mut deck = (0..4*13).into_iter().collect::<Vec<u32>>();
 
     let rank_strings: Vec<char> = "A23456789TJQK".chars().collect();
-    let suit_strings : Vec<char> = "CDHS".chars().collect();
+    let suit_strings: Vec<char> = "CDHS".chars().collect();
 
     randomizer.shuffle(&mut deck);
 
