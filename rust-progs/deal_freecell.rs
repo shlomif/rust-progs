@@ -1,3 +1,4 @@
+use std::env;
 /*
  * Microsoft C Run-time-Library-compatible Random Number Generator
  * Copyright by Shlomi Fish, 2011.
@@ -11,8 +12,8 @@ struct MSVC_Rand_Gen {
 
 impl MSVC_Rand_Gen {
     fn rand(&mut self) -> i32 {
-        self.seed = ((self.seed * 214013 + 2531011) & 0x7FFFFFFF);
-        return ((self.seed >> 16) & 0x7FFF);
+        self.seed = (self.seed * 214013 + 2531011) & 0x7FFFFFFF;
+        return (self.seed >> 16) & 0x7FFF;
     }
     fn max_rand(&mut self, mymax: i32) -> i32 {
         return self.rand() % mymax;
@@ -22,7 +23,7 @@ impl MSVC_Rand_Gen {
             let mut i = (deck.len() as i32) - 1;
             while i > 0 {
                 let j = self.max_rand(i+1);
-                vec::swap(deck, i as uint, j as uint);
+                deck.swap(i as usize, j as usize);
                 i = i-1;
             }
         }
@@ -43,42 +44,42 @@ impl MSVC_Rand_Gen {
  * */
 
 
-fn deal_ms_fc_board(seed: i32) -> str {
+fn deal_ms_fc_board(seed: i32) -> String {
     let mut randomizer = MSVC_Rand_Gen { seed: seed, };
     let num_cols = 8;
 
-    let mut columns = vec::from_elem(num_cols, ~[]);
-    let mut deck = vec::from_fn(4*13, |i| i);
+    let mut columns = vec![vec![]; num_cols];
+    let mut deck = (0..4*13).into_iter().collect::<Vec<i32>>();
 
-    let rank_strings = str::to_chars("A23456789TJQK");
-    let suit_strings = str::to_chars("CDHS");
+    let rank_strings = "A23456789TJQK";
+    let suit_strings = "CDHS";
 
-    randomizer.shuffle(deck);
+    randomizer.shuffle(&mut deck);
 
-    vec::reverse(deck);
+    deck.reverse();
 
-    for uint::range(0, 52) |i| {
+    for i in 0 .. 52 {
         columns[i % num_cols].push(deck[i]);
     };
 
-    let render_card = |card: &uint| {
+    let render_card = |card: &u32| {
         let suit = card % 4;
         let rank = card / 4;
 
-        fmt!("%c%c",rank_strings[rank], suit_strings[suit])
+        return format!("{:?}{:?}",rank_strings.chars().nth(rank as usize), suit_strings.chars().nth(suit as usize))
     };
 
-    let render_column = |col: &[uint]| {
-        fmt!(": %s\n", str::connect((col.map(render_card)), " "))
+    let render_column = |col: &[u32]| {
+        return format!(": {}\n", col.iter().map(render_card).join(" "))
     };
 
     return str::concat(columns.map(render_column));
 }
 
 fn main() {
-    let args: [str] = os::args();
+    let args: [str] = env::args();
 
-    match uint::from_str(args[1]) {
+    match u32::from_str(args[1]) {
         Some(x) => print!("{}", deal_ms_fc_board(x as i32)),
         None => println!("I need a real number"),
     }
@@ -86,10 +87,11 @@ fn main() {
     if false {
         let mut r = MSVC_Rand_Gen { seed: 1,};
 
-        println!("Result={}",r.rand() as int);
-        println!("Result={}",r.rand() as int);
-        println!("Result={}",r.rand() as int);
+        println!("Result={}",r.rand());
+        println!("Result={}",r.rand());
+        println!("Result={}",r.rand());
 
+        /*
         let mut array: [int, ..10] = [0,1,2,3,4,5,6,7,8,9];
 
         let mut shuffler = MSVC_Rand_Gen { seed : 24,};
@@ -99,5 +101,6 @@ fn main() {
         for array.each |i| {
             println!("A={}", *i);
         }
+        */
     }
 }
