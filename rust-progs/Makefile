@@ -5,7 +5,7 @@ hello: hello.rs
 	rustc $<
 
 multi_deal_freecell: multi_deal_freecell.rs
-	rustc $<
+	rustc -O $<
 
 mut-vars: mut-vars.rs
 	rustc $<
