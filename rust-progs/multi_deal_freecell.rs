@@ -75,89 +75,71 @@ fn deal_ms_fc_board(seed: i32) -> String {
 }
 
 fn main() -> std::io::Result<()> {
-    let mut args = env::args();
+    let args: Vec<String> = env::args().collect();
     let mut dir = String::from("");
     let mut suffix = String::from("");
 
     let mut argidx: usize = 1;
-    while argidx < args.len() {
-        let arg = args.nth(argidx);
-        match arg {
-            Some(x)=> {
-                let s = x.to_string();
-                let first_char = s.chars().next().unwrap();
-                if first_char != '-'
-                {
-                    break;
-                }
-                match s.as_ref() {
-                    "--dir" => {
-                        argidx +=1;
-                        let p = args.nth(argidx);
-                        match p {
-                            Some(y) => {
-                                dir = y.to_string();
-                            },
-                            _ => {},
-                        }
-                    },
-                    "--suffix" => {
-                        argidx +=1;
-                        let p = args.nth(argidx);
-                        match p {
-                            Some(y) => {
-                                suffix = y.to_string();
-                            },
-                            _ => {},
-                        }
-                    },
-                    _ => {},
-                }
-            },
-            None => {},
+    let mut still_loop: bool = true;
+    while (argidx < args.len()) && still_loop {
+        let arg = &args[argidx];
+        let s = arg;
+        let first_char = s.chars().next().unwrap();
+        if first_char != '-'
+        {
+            still_loop = false;
+            println!("auio");
+        }
+        else {
+            match s.as_ref() {
+                "--dir" => {
+                    argidx +=1;
+                    let p = &args[argidx];
+                    dir = (&p).to_string();
+                },
+                "--suffix" => {
+                    argidx +=1;
+                    let p = &args[argidx];
+                    suffix = (&p).to_string();
+                },
+                _ => {},
+            }
         }
         argidx+= 1;
     }
+    println!("argtd {} {}", argidx, args.len());
     while argidx < args.len() {
-        let arg = args.nth(argidx);
-        match arg {
-            Some(x)=> {
-                let s = x.to_string();
-                match s.as_ref() {
-                    "seq" => {
+        let arg = &args[argidx];
+        println!("argpop");
+        let s = arg;
+        println!("argtduuuu");
+        match s.as_ref() {
+            "seq" => {
+                argidx +=1;
+                let p = &args[argidx];
+                match p.to_string().parse::<u32>() {
+                    Ok(y) => {
                         argidx +=1;
-                        let p = args.nth(argidx);
-                        match p {
-                            Some(x) => match x.to_string().parse::<u32>() {
-                                Ok(y) => {
-                                    argidx +=1;
-                                    let pend = args.nth(argidx);
-                                    match pend {
-                                        Some(xend) => match xend.to_string().parse::<u32>() {
-                                            Ok(yend) => {
-                                                for i in (y as i32) .. (yend as i32) {
-                                                    let mut f = File::create(format!("{}/{}{}", dir, i, suffix))?;
-                                                    f.write(deal_ms_fc_board(i).as_bytes())?;
-                                                }
-                                            },
-                                            Err(_e) => println!("I need a real number"),
-                                        },
-                                        None => {}
-                                    };
-                                },
-                                Err(_e) => println!("I need a real number"),
+                        let pend = &args[argidx];
+                        match pend.to_string().parse::<u32>() {
+                            Ok(yend) => {
+                                for i in (y as i32) .. (yend as i32) {
+                                    let mut f = File::create(format!("{}/{}{}", dir, i, suffix))?;
+                                    f.write(deal_ms_fc_board(i).as_bytes())?;
+                                }
                             },
-                            None => {},
-                        }
-                        argidx+= 1;
+                            Err(_e) => println!("I need a real number"),
+                        };
                     },
-                    _ => {
-                        println!("I need a seq");
-                    },
-                }
+                    Err(_e) => println!("I need a real number"),
+                };
+                argidx+= 1;
             },
-            None => println!("foo"),
+            _ => {
+                println!("I need a seq");
+            },
         }
+        argidx += 1;
     }
     return Ok(());
 }
