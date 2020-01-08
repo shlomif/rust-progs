@@ -1,3 +1,5 @@
+use std::io::prelude::*;
+use std::fs::File;
 use std::env;
 /*
  * Microsoft C Run-time-Library-compatible Random Number Generator
@@ -6,11 +8,11 @@ use std::env;
  * ( http://en.wikipedia.org/wiki/MIT_License ).
  * */
 
-struct MSVC_Rand_Gen {
+struct MsvcRandGen {
     seed: i32
 }
 
-impl MSVC_Rand_Gen {
+impl MsvcRandGen {
     fn rand(&mut self) -> i32 {
         self.seed = self.seed.wrapping_mul(214013).wrapping_add(2531011) & 0x7FFFFFFF;
         return (self.seed >> 16) & 0x7FFF;
@@ -45,7 +47,7 @@ impl MSVC_Rand_Gen {
 
 
 fn deal_ms_fc_board(seed: i32) -> String {
-    let mut randomizer = MSVC_Rand_Gen { seed: seed, };
+    let mut randomizer = MsvcRandGen { seed: seed, };
     let num_cols = 8;
 
     let mut columns = vec![vec![]; num_cols];
@@ -72,9 +74,10 @@ fn deal_ms_fc_board(seed: i32) -> String {
 
 }
 
-fn main() {
+fn main() -> std::io::Result<()> {
     let mut args = env::args();
     let mut dir = String::from("");
+    let mut suffix = String::from("");
 
     let mut argidx: usize = 1;
     while argidx < args.len() {
@@ -83,7 +86,7 @@ fn main() {
             Some(x)=> {
                 let s = x.to_string();
                 let first_char = s.chars().next().unwrap();
-                if (first_char != '-')
+                if first_char != '-'
                 {
                     break;
                 }
@@ -98,6 +101,16 @@ fn main() {
                             _ => {},
                         }
                     },
+                    "--suffix" => {
+                        argidx +=1;
+                        let p = args.nth(argidx);
+                        match p {
+                            Some(y) => {
+                                suffix = y.to_string();
+                            },
+                            _ => {},
+                        }
+                    },
                     _ => {},
                 }
             },
@@ -105,12 +118,46 @@ fn main() {
         }
         argidx+= 1;
     }
-    match args.nth(1) {
-        Some(x) => match x.to_string().parse::<u32>() {
-            Ok(y) => print!("{}", deal_ms_fc_board(y as i32)),
-            Err(E) => println!("I need a real number"),
-        },
-        None => println!("I need a real number"),
+    while argidx < args.len() {
+        let arg = args.nth(argidx);
+        match arg {
+            Some(x)=> {
+                let s = x.to_string();
+                match s.as_ref() {
+                    "seq" => {
+                        argidx +=1;
+                        let p = args.nth(argidx);
+                        match p {
+                            Some(x) => match x.to_string().parse::<u32>() {
+                                Ok(y) => {
+                                    argidx +=1;
+                                    let pend = args.nth(argidx);
+                                    match pend {
+                                        Some(xend) => match xend.to_string().parse::<u32>() {
+                                            Ok(yend) => {
+                                                for i in (y as i32) .. (yend as i32) {
+                                                    let mut f = File::create(format!("{}/{}{}", dir, i, suffix))?;
+                                                    f.write(deal_ms_fc_board(i).as_bytes())?;
+                                                }
+                                            },
+                                            Err(_e) => println!("I need a real number"),
+                                        },
+                                        None => {}
+                                    };
+                                },
+                                Err(_e) => println!("I need a real number"),
+                            },
+                            None => {},
+                        }
+                        argidx+= 1;
+                    },
+                    _ => {
+                        println!("I need a seq");
+                    },
+                }
+            },
+            None => println!("foo"),
+        }
     }
-
+    return Ok(());
 }
