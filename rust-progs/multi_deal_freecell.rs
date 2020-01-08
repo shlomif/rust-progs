@@ -124,7 +124,7 @@ fn main() -> std::io::Result<()> {
                         let pend = &args[argidx];
                         match pend.to_string().parse::<u32>() {
                             Ok(yend) => {
-                                for i in (y as i32) .. (yend as i32) {
+                                for i in (y as i32) .. ((yend+1) as i32) {
                                     let mut f = File::create(format!("{}/{}{}", dir, i, suffix))?;
                                     f.write(deal_ms_fc_board(i).as_bytes())?;
                                 }
