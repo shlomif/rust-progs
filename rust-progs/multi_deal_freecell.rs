@@ -84,6 +84,7 @@ fn main() -> std::io::Result<()> {
     while (argidx < args.len()) && still_loop {
         let arg = &args[argidx];
         let s = arg;
+            println!("s = {}", s);
         let first_char = s.chars().next().unwrap();
         if first_char != '-'
         {
@@ -102,17 +103,17 @@ fn main() -> std::io::Result<()> {
                     let p = &args[argidx];
                     suffix = (&p).to_string();
                 },
-                _ => {},
+                _ => panic!("Unknown flag {}", s),
             }
+            argidx+= 1;
         }
-        argidx+= 1;
     }
     println!("argtd {} {}", argidx, args.len());
     while argidx < args.len() {
         let arg = &args[argidx];
         println!("argpop");
         let s = arg;
-        println!("argtduuuu");
+        println!("argtduuuu {}", s);
         match s.as_ref() {
             "seq" => {
                 argidx +=1;
@@ -128,15 +129,14 @@ fn main() -> std::io::Result<()> {
                                     f.write(deal_ms_fc_board(i).as_bytes())?;
                                 }
                             },
-                            Err(_e) => println!("I need a real number"),
+                            Err(_e) => panic!("I need a real number"),
                         };
                     },
-                    Err(_e) => println!("I need a real number"),
+                    Err(_e) => panic!("I need a real number"),
                 };
-                argidx+= 1;
             },
             _ => {
-                println!("I need a seq");
+                panic!("I need a seq");
             },
         }
         argidx += 1;
