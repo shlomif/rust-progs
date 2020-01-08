@@ -84,12 +84,10 @@ fn main() -> std::io::Result<()> {
     while (argidx < args.len()) && still_loop {
         let arg = &args[argidx];
         let s = arg;
-            println!("s = {}", s);
         let first_char = s.chars().next().unwrap();
         if first_char != '-'
         {
             still_loop = false;
-            println!("auio");
         }
         else {
             match s.as_ref() {
@@ -108,12 +106,9 @@ fn main() -> std::io::Result<()> {
             argidx+= 1;
         }
     }
-    println!("argtd {} {}", argidx, args.len());
     while argidx < args.len() {
         let arg = &args[argidx];
-        println!("argpop");
         let s = arg;
-        println!("argtduuuu {}", s);
         match s.as_ref() {
             "seq" => {
                 argidx +=1;
