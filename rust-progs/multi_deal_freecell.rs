@@ -61,13 +61,13 @@ fn deal_ms_fc_board(seed: i32) -> String {
     deck.reverse();
 
     for i in 0 .. 52 {
-        columns[i % num_cols].push(deck[i]);
+        columns[i & 7].push(deck[i]);
     };
 
     return columns.iter().map(|col| {
         return format!("{}\n", col.iter().map(|card| {
-            let suit = card % 4;
-            let rank = card / 4;
+            let suit = card & 3;
+            let rank = card >> 2;
             return format!("{}{}",rank_strings[rank as usize], suit_strings[suit as usize])
         }).collect::<Vec<String>>().join(" "))
     }).collect::<Vec<String>>().join("")
