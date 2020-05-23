@@ -53,6 +53,13 @@ EOF
         "--suffix", ".board", "--dir", $got_dir, "seq", "1", "10" );
 
     # TEST
-    eq_or_diff( scalar(`diff -u -r ./t/data/expected-seq-1-10/`),
-        '', "Deal 1 to 10", );
+    if (
+        eq_or_diff(
+            scalar(`diff -u -r ./t/data/expected-seq-1-10/ "$got_dir"`), '',
+            "Deal 1 to 10",
+        )
+        )
+    {
+        $got_dir->remove_tree();
+    }
 }
