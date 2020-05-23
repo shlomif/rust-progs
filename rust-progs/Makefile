@@ -1,4 +1,6 @@
 
+EXES := hello multi_deal_freecell mut-vars deal_freecell string_concat
+
 all: hello multi_deal_freecell mut-vars deal_freecell string_concat
 
 hello: hello.rs
@@ -18,3 +20,6 @@ string_concat: string_concat.rs
 
 test: all
 	runprove t/*.t
+
+clean:
+	rm -f $(EXES)
