@@ -3,9 +3,11 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Test::Differences qw( eq_or_diff );
+
+use Path::Tiny qw( path );
 
 {
     # TEST
@@ -41,4 +43,16 @@ EOF
 EOF
         "Deal Freecell #24",
     );
+}
+
+{
+    my $got_dir = path("./t/data/got-seq-1-10/");
+    $got_dir->remove_tree();
+    $got_dir->mkpath();
+    system( "./multi_deal_freecell",
+        "--suffix", ".board", "--dir", $got_dir, "seq", "1", "10" );
+
+    # TEST
+    eq_or_diff( scalar(`diff -u -r ./t/data/expected-seq-1-10/`),
+        '', "Deal 1 to 10", );
 }
