@@ -7,7 +7,7 @@ hello: hello.rs
 	rustc $<
 
 multi_deal_freecell: multi_deal_freecell.rs
-	rustc -O $<
+	rustc -L ./src/board_gen_lookup1.rs -O $<
 
 mut-vars: mut-vars.rs
 	rustc $<

@@ -1,6 +1,7 @@
 use std::io::prelude::*;
 use std::fs::File;
 use std::env;
+mod board_gen_lookup1;
 // use bytes::Bytes;
 /*
  * Microsoft C Run-time-Library-compatible Random Number Generator
@@ -58,8 +59,6 @@ fn deal_ms_fc_board(seed: i32) -> [u8;52*3] {
 
     deck.reverse();
 
-    const OFFSET_BY_I: [usize;52] = [ 0,21,42,63,84,102,120,138,3,24,45,66,87,105,123,141,6,27,48,69,90,108,126,144,9,30,51,72,93,111,129,147,12,33,54,75,96,114,132,150,15,36,57,78,99,117,135,153,18,39,60,81 ];
-
     let mut ret: [u8; 52*3]= [0;52*3];
     // <[u8; 52*3]>::from("XX XX XX XX XX XX XX\n".to_owned() +
     ret.copy_from_slice(
@@ -77,7 +76,7 @@ fn deal_ms_fc_board(seed: i32) -> [u8;52*3] {
       //          ); //.as_bytes() as [u8; 52*3];
 
     for i in 0 .. 52 {
-        let offset =OFFSET_BY_I[i];
+        let offset =board_gen_lookup1::OFFSET_BY_I[i];
         let rank = deck[i] >> 2;
         let suit = deck[i] & 0b11;
         ret[offset]= RANK_STRINGS[rank as usize];
