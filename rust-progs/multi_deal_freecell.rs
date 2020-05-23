@@ -51,8 +51,8 @@ fn deal_ms_fc_board(seed: i32) -> [u8;52*3] {
     let mut randomizer = MsvcRandGen { seed: seed, };
     let mut deck = (0..4*13).into_iter().collect::<Vec<u32>>();
 
-    let rank_strings: &[u8] = "A23456789TJQK".as_bytes();
-    let suit_strings: &[u8] = "CDHS".as_bytes();
+    const RANK_STRINGS: &[u8] = "A23456789TJQK".as_bytes();
+    const SUIT_STRINGS: &[u8] = "CDHS".as_bytes();
 
     randomizer.shuffle(&mut deck);
 
@@ -80,8 +80,8 @@ fn deal_ms_fc_board(seed: i32) -> [u8;52*3] {
         let offset =OFFSET_BY_I[i];
         let rank = deck[i] >> 2;
         let suit = deck[i] & 0b11;
-        ret[offset]= rank_strings[rank as usize];
-        ret[offset+1]= suit_strings[suit as usize];
+        ret[offset]= RANK_STRINGS[rank as usize];
+        ret[offset+1]= SUIT_STRINGS[suit as usize];
     };
     return ret;
 }
