@@ -1,6 +1,7 @@
 use std::io::prelude::*;
 use std::fs::File;
 use std::env;
+// use bytes::Bytes;
 /*
  * Microsoft C Run-time-Library-compatible Random Number Generator
  * Copyright by Shlomi Fish, 2011.
@@ -46,32 +47,43 @@ impl MsvcRandGen {
  * */
 
 
-fn deal_ms_fc_board(seed: i32) -> String {
+fn deal_ms_fc_board(seed: i32) -> [u8;52*3] {
     let mut randomizer = MsvcRandGen { seed: seed, };
-    let num_cols = 8;
-
-    let mut columns = vec![vec![]; num_cols];
     let mut deck = (0..4*13).into_iter().collect::<Vec<u32>>();
 
-    let rank_strings: Vec<char> = "A23456789TJQK".chars().collect();
-    let suit_strings: Vec<char> = "CDHS".chars().collect();
+    let rank_strings: &[u8] = "A23456789TJQK".as_bytes();
+    let suit_strings: &[u8] = "CDHS".as_bytes();
 
     randomizer.shuffle(&mut deck);
 
     deck.reverse();
 
+    const OFFSET_BY_I: [usize;52] = [ 0,21,42,63,84,102,120,138,3,24,45,66,87,105,123,141,6,27,48,69,90,108,126,144,9,30,51,72,93,111,129,147,12,33,54,75,96,114,132,150,15,36,57,78,99,117,135,153,18,39,60,81 ];
+
+    let mut ret: [u8; 52*3]= [0;52*3];
+    // <[u8; 52*3]>::from("XX XX XX XX XX XX XX\n".to_owned() +
+    ret.copy_from_slice(
+    // String::from("XX XX XX XX XX XX XX\n".to_owned() +
+    ("XX XX XX XX XX XX XX\n".to_owned() +
+                "XX XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX\n" +
+                "XX XX XX XX XX XX\n"
+                ).as_bytes());
+    //as [u8; 52*3];
+      //          ); //.as_bytes() as [u8; 52*3];
+
     for i in 0 .. 52 {
-        columns[i & 7].push(deck[i]);
+        let offset =OFFSET_BY_I[i];
+        let rank = deck[i] >> 2;
+        let suit = deck[i] & 0b11;
+        ret[offset]= rank_strings[rank as usize];
+        ret[offset+1]= suit_strings[suit as usize];
     };
-
-    return columns.iter().map(|col| {
-        return format!("{}\n", col.iter().map(|card| {
-            let suit = card & 3;
-            let rank = card >> 2;
-            return format!("{}{}",rank_strings[rank as usize], suit_strings[suit as usize])
-        }).collect::<Vec<String>>().join(" "))
-    }).collect::<Vec<String>>().join("")
-
+    return ret;
 }
 
 fn main() -> std::io::Result<()> {
@@ -121,7 +133,7 @@ fn main() -> std::io::Result<()> {
                             Ok(yend) => {
                                 for i in (y as i32) .. ((yend+1) as i32) {
                                     let mut f = File::create(format!("{}/{}{}", dir, i, suffix))?;
-                                    f.write(deal_ms_fc_board(i).as_bytes())?;
+                                    f.write(&deal_ms_fc_board(i));
                                 }
                             },
                             Err(_e) => panic!("I need a real number"),

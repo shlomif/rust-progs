@@ -1,0 +1,8 @@
+[package]
+name = "multi_deal_freecell"
+version = "0.0.2"
+authors = ["Shlomi Fish"]
+# edition = "2020"
+[[bin]]
+name = "multi_deal_freecell"
+path = "multi_deal_freecell.rs"
